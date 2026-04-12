@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface text-foreground;
+  }
+
+  ::selection {
+    @apply bg-accent/25 text-foreground;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply mx-auto max-w-[1080px] px-6 sm:px-10;
+  }
+
+  .section-padding {
+    @apply py-28 md:py-36;
+  }
+
+  .section-heading {
+    @apply mb-3 font-mono text-xs font-normal uppercase tracking-[0.25em] text-accent-glow;
+  }
+
+  .section-subheading {
+    @apply mb-14 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl;
+  }
+
+  .glass-panel {
+    @apply relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface-50/80 backdrop-blur-md;
+  }
+
+  .glass-panel::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500;
+    background: radial-gradient(
+      600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(99, 102, 241, 0.06),
+      transparent 40%
+    );
+  }
+
+  .glass-panel:hover::before {
+    @apply opacity-100;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      #fafafa 0%,
+      #fafafa 50%,
+      #818cf8 100%
+    );
+  }
+
+  .gradient-border {
+    @apply relative;
+  }
+
+  .gradient-border::after {
+    content: "";
+    @apply pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.3),
+      transparent 50%,
+      rgba(99, 102, 241, 0.15)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .gradient-border:hover::after {
+    @apply opacity-100;
+  }
+}
+
+/* Section divider */
+.section-divider {
+  @apply mx-auto h-px w-full max-w-[1080px];
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 102, 241, 0.15) 20%,
+    rgba(99, 102, 241, 0.08) 80%,
+    transparent
+  );
+}
+
+/* Lenis overrides */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Subtle dot grid */
+.bg-grid {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px
+  );
+  background-size: 32px 32px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  CardSwap                                                           */
+/* ------------------------------------------------------------------ */
+
+.card-swap-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(5%, 20%);
+  transform-origin: bottom right;
+  perspective: 900px;
+  overflow: visible;
+}
+
+.card-swap-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0f0f12;
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* Subtle inner glow on the card surface */
+.card-swap-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 30% 0%,
+    rgba(99, 102, 241, 0.04),
+    transparent 60%
+  );
+}
+
+@media (max-width: 768px) {
+  .card-swap-container {
+    transform: scale(0.7) translate(25%, 25%);
+  }
+}
+
+@media (max-width: 480px) {
+  .card-swap-container {
+    transform: scale(0.5) translate(30%, 30%);
+  }
+}
+
+/* Noise texture overlay */
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
